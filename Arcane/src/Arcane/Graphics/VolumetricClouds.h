@@ -16,6 +16,9 @@ namespace Arcane
 	struct NoiseTextureParams
 	{
 		CloudNoiseAlgorithm NoiseAlgorithm = CloudNoiseAlgorithm::CloudNoiseAlgorithm_Worley;
+		float Frequency = 8.0f;
+		int Octaves = 8;
+		std::mt19937::result_type Seed = 12345;
 	};
 
 	class VolumetricClouds

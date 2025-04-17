@@ -275,6 +275,7 @@
     <ClInclude Include="src\Arcane\Editor\RendererStatsDisplay.h" />
     <ClInclude Include="src\Arcane\Graphics\Camera\CameraController.h" />
     <ClInclude Include="src\Arcane\Graphics\Camera\OrthographicCamera.h" />
+    <ClInclude Include="src\Arcane\Graphics\Noise\PerlinNoise.h" />
     <ClInclude Include="src\Arcane\Graphics\Renderer\DebugDraw3D.h" />
     <ClInclude Include="src\Arcane\Graphics\Renderer\Renderer2D.h" />
     <ClInclude Include="src\Arcane\Graphics\Renderer\Renderpass\EditorPass.h" />

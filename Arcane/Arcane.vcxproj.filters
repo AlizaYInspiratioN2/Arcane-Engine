@@ -180,6 +180,7 @@
     <ClInclude Include="src\Arcane\Graphics\Camera\CameraController.h" />
     <ClInclude Include="src\Arcane\Graphics\VolumetricClouds.h" />
     <ClInclude Include="src\Arcane\Graphics\Texture\Texture3D.h" />
+    <ClInclude Include="src\Arcane\Graphics\Noise\PerlinNoise.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\awesomeface.png" />
