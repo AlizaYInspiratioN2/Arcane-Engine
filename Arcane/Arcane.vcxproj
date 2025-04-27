@@ -170,7 +170,8 @@
     <ClCompile Include="src\Arcane\Graphics\Renderer\Renderer2D.cpp" />
     <ClCompile Include="src\Arcane\Graphics\Renderer\Renderpass\EditorPass.cpp" />
     <ClCompile Include="src\Arcane\Graphics\Texture\Texture3D.cpp" />
-    <ClCompile Include="src\Arcane\Graphics\VolumetricClouds.cpp" />
+    <ClCompile Include="src\Arcane\Graphics\Volumetric\VolumetricClouds.cpp" />
+    <ClCompile Include="src\Arcane\Graphics\Volumetric\VolumetricManager.cpp" />
     <ClCompile Include="src\Arcane\Graphics\Water\WaterManager.cpp" />
     <ClCompile Include="src\Arcane\RenderdocManager.cpp" />
     <ClCompile Include="src\Arcane\Core\Application.cpp" />
@@ -280,7 +281,8 @@
     <ClInclude Include="src\Arcane\Graphics\Renderer\Renderer2D.h" />
     <ClInclude Include="src\Arcane\Graphics\Renderer\Renderpass\EditorPass.h" />
     <ClInclude Include="src\Arcane\Graphics\Texture\Texture3D.h" />
-    <ClInclude Include="src\Arcane\Graphics\VolumetricClouds.h" />
+    <ClInclude Include="src\Arcane\Graphics\Volumetric\VolumetricClouds.h" />
+    <ClInclude Include="src\Arcane\Graphics\Volumetric\VolumetricManager.h" />
     <ClInclude Include="src\Arcane\Graphics\Water\WaterManager.h" />
     <ClInclude Include="src\Arcane\RenderdocManager.h" />
     <ClInclude Include="src\Arcane.h" />

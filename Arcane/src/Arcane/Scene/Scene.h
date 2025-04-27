@@ -10,6 +10,10 @@
 #include <Arcane/Graphics/Water/WaterManager.h>
 #endif
 
+#ifndef VOLUMETRICMANAGER_H
+#include <Arcane/Graphics/Volumetric/VolumetricManager.h>
+#endif
+
 #ifndef PROBEMANAGER_H
 #include <Arcane/Graphics/IBL/ProbeManager.h>
 #endif
@@ -50,6 +54,7 @@ namespace Arcane
 		friend class Entity;
 		friend class LightManager;
 		friend class WaterManager;
+		friend class VolumetricManager;
 		friend class ScenePanel;
 		friend class WaterPass;
 	public:
@@ -88,6 +93,7 @@ namespace Arcane
 		LightManager m_LightManager;
 		ProbeManager m_ProbeManager;
 		WaterManager m_WaterManager;
+		VolumetricManager m_VolumetricManager;
 	};
 }
 #endif

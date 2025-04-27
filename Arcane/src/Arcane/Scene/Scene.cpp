@@ -15,7 +15,7 @@
 namespace Arcane
 {
 	Scene::Scene(Window *window)
-		: m_Terrain(nullptr), m_LightManager(this), m_ProbeManager(m_SceneProbeBlendSetting), m_WaterManager(this)
+		: m_Terrain(nullptr), m_LightManager(this), m_ProbeManager(m_SceneProbeBlendSetting), m_WaterManager(this), m_VolumetricManager(this)
 	{
 #if USE_PERSPECTIVE_PROJ
 		m_SceneCamera = new PerspectiveCamera();
@@ -38,6 +38,8 @@ namespace Arcane
 		auto fullOwningGroup1 = m_Registry.group<TransformComponent, MeshComponent>();
 		auto partialOwningGroup1 = m_Registry.group<LightComponent>(entt::get<TransformComponent>);
 		auto partialOwningGroup2 = m_Registry.group<TransformComponent, MeshComponent>(entt::get<PoseAnimatorComponent>);
+		auto partialOwningGroup3 = m_Registry.group<WaterComponent>(entt::get<TransformComponent>);
+		auto partialOwningGroup4 = m_Registry.group<VolumetricCloudComponent>(entt::get<TransformComponent>);
 
 		// Temp terrain things
 		m_Terrain = new Terrain();
@@ -59,6 +61,7 @@ namespace Arcane
 	{
 		m_LightManager.Init();
 		m_WaterManager.Init();
+		m_VolumetricManager.Init();
 	}
 
 	Entity Scene::CreateEntity(const std::string &name)
@@ -80,6 +83,9 @@ namespace Arcane
 
 		// Update Water
 		m_WaterManager.Update();
+
+		// Update Volumetric Manager
+		m_VolumetricManager.Update();
 
 		// Update Animated Entities
 		auto animatedView = m_Registry.view<PoseAnimatorComponent>();

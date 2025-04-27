@@ -27,7 +27,7 @@
 #endif
 
 #ifndef VOLUMETRICCLOUDS_H
-#include <Arcane/Graphics/VolumetricClouds.h>
+#include <Arcane/Graphics/Volumetric/VolumetricClouds.h>
 #endif
 
 namespace Arcane

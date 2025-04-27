@@ -7,7 +7,7 @@
 #include <Arcane/Vendor/Imgui/imgui.h>
 #include <Arcane/Animation/AnimationClip.h>
 #include <Arcane/Graphics/Texture/Texture3D.h>
-#include <Arcane/Graphics/VolumetricClouds.h>
+#include <Arcane/Graphics/Volumetric/VolumetricClouds.h>
 
 namespace Arcane
 {

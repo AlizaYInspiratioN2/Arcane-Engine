@@ -195,6 +195,11 @@ namespace Arcane
 		skybox->Draw(camera);
 		ARC_POP_RENDER_TAG();
 
+		// Render clouds
+		ARC_PUSH_RENDER_TAG("Volumetric Clouds");
+
+		ARC_POP_RENDER_TAG();
+
 		// Lighting setup
 		auto lightBindFunction = &LightManager::BindLightingUniforms;
 		if (renderOnlyStatic)

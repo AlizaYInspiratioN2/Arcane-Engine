@@ -12,7 +12,7 @@
 #include <Arcane/Animation/AnimationClip.h>
 #include <Arcane/Graphics/Renderer/Renderpass/MasterRenderPass.h>
 #include <Arcane/Graphics/Renderer/Renderpass/PostProcessPass.h>
-#include <Arcane/Graphics/VolumetricClouds.h>
+#include <Arcane/Graphics/Volumetric/VolumetricClouds.h>
 
 
 using namespace Arcane;
