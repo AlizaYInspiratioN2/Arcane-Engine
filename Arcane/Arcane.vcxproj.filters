@@ -183,6 +183,7 @@
     <ClInclude Include="src\Arcane\Graphics\Texture\Texture3D.h" />
     <ClInclude Include="src\Arcane\Graphics\Noise\PerlinNoise.h" />
     <ClInclude Include="src\Arcane\Graphics\Volumetric\VolumetricManager.h" />
+    <ClInclude Include="src\Arcane\Graphics\Noise\FastNoiseLite.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\awesomeface.png" />

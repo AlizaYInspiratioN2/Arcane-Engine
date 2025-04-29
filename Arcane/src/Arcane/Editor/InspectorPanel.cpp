@@ -369,10 +369,7 @@ namespace Arcane
 								shouldForceLoad = true;
 							}
 
-							// Build the custom params for the noise gen algorithm
-							NoiseTextureParams params;
-							params.NoiseAlgorithm = volumetricCloudComponent.NoiseAlgorithm;
-							volumetricCloudComponent.GeneratedNoiseTexture3D = VolumetricClouds::Generate3DNoiseTexture(params);
+							volumetricCloudComponent.GeneratedNoiseTexture3D = VolumetricClouds::Generate3DNoiseTexture(volumetricCloudComponent.NoiseGenParams);
 						}
 
 						if (volumetricCloudComponent.GeneratedNoiseTexture3D)
@@ -382,9 +379,21 @@ namespace Arcane
 						}
 
 						const char* algorithmChoices[] = { "Worley", "Perlin" };
-						int algorithmChoice = static_cast<int>(volumetricCloudComponent.NoiseAlgorithm);
-						ImGui::Combo("Noise Algorithm", &algorithmChoice, algorithmChoices, IM_ARRAYSIZE(algorithmChoices)); ImGui::SameLine();
-						volumetricCloudComponent.NoiseAlgorithm = static_cast<CloudNoiseAlgorithm>(algorithmChoice);
+						int algorithmChoice = static_cast<int>(volumetricCloudComponent.NoiseGenParams.NoiseAlgorithm);
+						ImGui::Separator();
+						ImGui::Combo("Noise Algorithm", &algorithmChoice, algorithmChoices, IM_ARRAYSIZE(algorithmChoices));
+						volumetricCloudComponent.NoiseGenParams.NoiseAlgorithm = static_cast<CloudNoiseAlgorithm>(algorithmChoice);
+
+						ImGui::SliderInt("Octaves", &volumetricCloudComponent.NoiseGenParams.Octaves, 1, 16);
+						ImGui::InputScalar("Seed", ImGuiDataType_U32, &volumetricCloudComponent.NoiseGenParams.Seed);
+						DrawVec3Control("Noise Scale", volumetricCloudComponent.NoiseGenParams.NoiseScale, 0.1f, 0.1f, 32.0f);
+
+						const char* qualityItems[] = { "Low", "Medium", "High", "Ultra" };
+						glm::uvec3 resolution = VolumetricManager::GetVolumetricNoiseGenQualityResolution(volumetricCloudComponent.NoiseGenParams.Quality);
+						int qualityChoice = static_cast<int>(volumetricCloudComponent.NoiseGenParams.Quality);
+						ImGui::Combo("NoiseGen Quality", &qualityChoice, qualityItems, IM_ARRAYSIZE(qualityItems)); ImGui::SameLine();
+						ImGui::Text("- %u x %u x %u", resolution.x, resolution.y, resolution.z);
+						volumetricCloudComponent.NoiseGenParams.Quality = static_cast<VolumetricNoiseGenQuality>(qualityChoice);
 					}
 				}
 			}
@@ -483,6 +492,6 @@ namespace Arcane
 		}
 
 		ImGui::Text("Slice %d / %d", sliceIndex, depth - 1);
-		ImGui::Image((void*)(intptr_t)sliceTexture, ImVec2(256, 256));
+		ImGui::Image((void*)(intptr_t)sliceTexture, ImVec2(512, 512));
 	}
 }

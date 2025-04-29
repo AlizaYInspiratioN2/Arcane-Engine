@@ -8,6 +8,15 @@ namespace Arcane
 	struct TransformComponent;
 	struct VolumetricCloudComponent;
 
+	enum class VolumetricNoiseGenQuality : int
+	{
+		VolumetricNoiseGenQuality_Low,			// 64 x 64
+		VolumetricNoiseGenQuality_Medium,		// 128 x 128
+		VolumetricNoiseGenQuality_High,			// 256 x 256
+		VolumetricNoiseGenQuality_Ultra,		// 512 x 512
+		VolumetricNoiseGenQualitySize
+	};
+
 	class VolumetricManager
 	{
 	public:
@@ -16,6 +25,8 @@ namespace Arcane
 
 		void Init();
 		void Update();
+
+		static glm::uvec3 GetVolumetricNoiseGenQualityResolution(VolumetricNoiseGenQuality quality);
 	private:
 		void FindClosestVolumetricCloud();
 	private:

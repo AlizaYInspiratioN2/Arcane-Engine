@@ -3,6 +3,7 @@
 
 #include <Arcane/Graphics/Texture/Texture3D.h>
 #include <Arcane/Graphics/Noise/PerlinNoise.h>
+#include <Arcane/Graphics/Noise/FastNoiseLite.h>
 #include <Arcane/Graphics/Renderer/Renderer.h>
 #include <Arcane/Graphics/Renderer/GLCache.h>
 #include <Arcane/Graphics/Shader.h>
@@ -46,44 +47,78 @@ namespace Arcane
 	{
 		Texture3D* texture3D = new Texture3D();
 
-		const unsigned int width = 256;
-		const unsigned int height = 256;
-		const unsigned int depth = 256;
+		glm::uvec3 resolution = VolumetricManager::GetVolumetricNoiseGenQualityResolution(params.Quality);
+		const unsigned int width = resolution.x;
+		const unsigned int height = resolution.y;
+		const unsigned int depth = resolution.z;
 
 		const glm::vec3 scale = glm::vec3(params.NoiseScale.x / width, params.NoiseScale.y / height, params.NoiseScale.z / depth);
-
-		const siv::PerlinNoise::seed_type seed = params.Seed;
-		const siv::PerlinNoise perlin{ seed };
-
 		std::vector<unsigned char> textureData(width * height * depth * 3); // 3 bytes per pixel (RGB)
-		for (unsigned int z = 0; z < depth; z++)
-		{
-			for (unsigned int y = 0; y < height; y++)
-			{
-				for (unsigned int x = 0; x < width; x++)
-				{
-					size_t index = (z * width * height + y * width + x) * 3;
 
-					if (params.NoiseAlgorithm == CloudNoiseAlgorithm::CloudNoiseAlgorithm_Worley)
-					{
-						textureData[index + 0] = 255;
-						textureData[index + 1] = 255;
-						textureData[index + 2] = 255;
-					}
-					else if (params.NoiseAlgorithm == CloudNoiseAlgorithm::CloudNoiseAlgorithm_Perlin)
-					{
-						const float noise = (float)perlin.octave3D_01(x * scale.x, y * scale.y, z * scale.z, params.Octaves);
-						textureData[index + 0] = noise * 255.0f;
-						textureData[index + 1] = noise * 255.0f;
-						textureData[index + 2] = noise * 255.0f;
-					}
-				}
-			}
+		const unsigned int numThreads = std::thread::hardware_concurrency();
+		const unsigned int slicesPerThread = depth / numThreads;
+
+		std::vector<std::thread> threads;
+		for (unsigned int i = 0; i < numThreads; ++i)
+		{
+			unsigned int zStart = i * slicesPerThread;
+			unsigned int zEnd = (i == numThreads - 1) ? depth : zStart + slicesPerThread; // Last thread handles extra slices
+
+			threads.emplace_back(Generate3DNoiseTextureChunk,
+				std::ref(textureData),
+				std::ref(params),
+				width, height, depth,
+				zStart, zEnd,
+				scale);
+		}
+
+		for (auto& t : threads)
+		{
+			t.join();
 		}
 
 		Texture3DSettings textureSettings;
 		texture3D->SetTextureSettings(textureSettings);
 		texture3D->Generate3DTexture(width, height, depth, GL_RGB, GL_UNSIGNED_BYTE, textureData.data());
 		return texture3D;
+	}
+
+	// Does part of the generation work so we can multi-thread it by passing threads different slices
+	void VolumetricClouds::Generate3DNoiseTextureChunk(std::vector<unsigned char>& textureData, NoiseTextureParams& params, unsigned int width, unsigned int height, unsigned int depth, unsigned int zStart, unsigned int zEnd, glm::vec3& scale)
+	{
+		FastNoiseLite worley(static_cast<int>(params.Seed));
+		worley.SetNoiseType(FastNoiseLite::NoiseType_Cellular);
+		worley.SetFrequency(1.0f);
+
+		const siv::PerlinNoise::seed_type seed = params.Seed;
+		const siv::PerlinNoise perlin{ seed };
+
+		for (unsigned int z = zStart; z < zEnd; ++z)
+		{
+			for (unsigned int y = 0; y < height; ++y)
+			{
+				for (unsigned int x = 0; x < width; ++x)
+				{
+					size_t index = (z * width * height + y * width + x) * 3;
+
+					if (params.NoiseAlgorithm == CloudNoiseAlgorithm::CloudNoiseAlgorithm_Worley)
+					{
+						const float worleyNoise = worley.GetNoise(x * scale.x, y * scale.y, z * scale.z);
+						const unsigned char value = static_cast<unsigned char>((worleyNoise + 1.0f) * 0.5f * 255.0f);
+						textureData[index + 0] = value;
+						textureData[index + 1] = value;
+						textureData[index + 2] = value;
+					}
+					else if (params.NoiseAlgorithm == CloudNoiseAlgorithm::CloudNoiseAlgorithm_Perlin)
+					{
+						const float perlinNoise = static_cast<float>(perlin.octave3D_01(x * scale.x, y * scale.y, z * scale.z, params.Octaves));
+						const unsigned char value = static_cast<unsigned char>(perlinNoise * 255.0f);
+						textureData[index + 0] = value;
+						textureData[index + 1] = value;
+						textureData[index + 2] = value;
+					}
+				}
+			}
+		}
 	}
 }

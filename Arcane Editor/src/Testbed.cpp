@@ -208,7 +208,7 @@ void Testbed::LoadTestbedGraphics()
 	{
 		auto clouds = scene->CreateEntity("Clouds");
 		auto& volumetricCloudComponent = clouds.AddComponent<VolumetricCloudComponent>();
-		volumetricCloudComponent.NoiseAlgorithm = CloudNoiseAlgorithm::CloudNoiseAlgorithm_Worley;
+		volumetricCloudComponent.NoiseGenParams.NoiseAlgorithm = CloudNoiseAlgorithm::CloudNoiseAlgorithm_Worley;
 	}
 
 	{

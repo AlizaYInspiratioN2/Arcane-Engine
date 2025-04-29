@@ -170,7 +170,7 @@ namespace Arcane
 	struct VolumetricCloudComponent
 	{
 		Texture3D* GeneratedNoiseTexture3D = nullptr;
-		CloudNoiseAlgorithm NoiseAlgorithm = CloudNoiseAlgorithm::CloudNoiseAlgorithm_Worley;
+		NoiseTextureParams NoiseGenParams;
 	};
 }
 #endif

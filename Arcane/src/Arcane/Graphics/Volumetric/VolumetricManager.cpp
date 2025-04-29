@@ -48,4 +48,26 @@ namespace Arcane
 			}
 		}
 	}
+
+	glm::uvec3 VolumetricManager::GetVolumetricNoiseGenQualityResolution(VolumetricNoiseGenQuality quality)
+	{
+		switch (quality)
+		{
+		case VolumetricNoiseGenQuality::VolumetricNoiseGenQuality_Low:
+			return glm::uvec3(64, 64, 64);
+			break;
+		case VolumetricNoiseGenQuality::VolumetricNoiseGenQuality_Medium:
+			return glm::uvec3(128, 128, 128);
+			break;
+		case VolumetricNoiseGenQuality::VolumetricNoiseGenQuality_High:
+			return glm::uvec3(256, 256, 256);
+			break;
+		case VolumetricNoiseGenQuality::VolumetricNoiseGenQuality_Ultra:
+			return glm::uvec3(512, 512, 512);
+			break;
+		default:
+			ARC_ASSERT(false, "Failed to find a noise gen quality resolution, given the quality setting");
+			return glm::uvec3(0, 0, 0);
+		}
+	}
 }
