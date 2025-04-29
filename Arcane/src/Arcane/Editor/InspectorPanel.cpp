@@ -378,7 +378,7 @@ namespace Arcane
 							Visualize3DTextureSlice(volumetricCloudComponent.GeneratedNoiseTexture3D, sliceToVisualize, shouldForceLoad);
 						}
 
-						const char* algorithmChoices[] = { "Worley", "Perlin" };
+						const char* algorithmChoices[] = { "Worley", "Perlin", "Mixed" };
 						int algorithmChoice = static_cast<int>(volumetricCloudComponent.NoiseGenParams.NoiseAlgorithm);
 						ImGui::Separator();
 						ImGui::Combo("Noise Algorithm", &algorithmChoice, algorithmChoices, IM_ARRAYSIZE(algorithmChoices));

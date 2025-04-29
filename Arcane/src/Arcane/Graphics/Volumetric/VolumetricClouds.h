@@ -17,6 +17,7 @@ namespace Arcane
 	{
 		CloudNoiseAlgorithm_Worley,
 		CloudNoiseAlgorithm_Perlin,
+		CloudNoiseAlgorithm_WorleyPerlinMix,
 		CloudNoiseAlgorithmSize
 	};
 

@@ -103,19 +103,41 @@ namespace Arcane
 
 					if (params.NoiseAlgorithm == CloudNoiseAlgorithm::CloudNoiseAlgorithm_Worley)
 					{
-						const float worleyNoise = worley.GetNoise(x * scale.x, y * scale.y, z * scale.z);
-						const unsigned char value = static_cast<unsigned char>((worleyNoise + 1.0f) * 0.5f * 255.0f);
-						textureData[index + 0] = value;
-						textureData[index + 1] = value;
-						textureData[index + 2] = value;
+						float worleyNoise = worley.GetNoise(x * scale.x, y * scale.y, z * scale.z);
+						worleyNoise = (worleyNoise + 1.0f) * 0.5f;
+						worleyNoise = 1.0f - worleyNoise;
+						worleyNoise = std::pow(worleyNoise, 4.0f);
+						const unsigned char worleyValue = static_cast<unsigned char>(worleyNoise * 255.0f);
+
+						textureData[index + 0] = worleyValue;
+						textureData[index + 1] = worleyValue;
+						textureData[index + 2] = worleyValue;
 					}
 					else if (params.NoiseAlgorithm == CloudNoiseAlgorithm::CloudNoiseAlgorithm_Perlin)
 					{
-						const float perlinNoise = static_cast<float>(perlin.octave3D_01(x * scale.x, y * scale.y, z * scale.z, params.Octaves));
-						const unsigned char value = static_cast<unsigned char>(perlinNoise * 255.0f);
-						textureData[index + 0] = value;
-						textureData[index + 1] = value;
-						textureData[index + 2] = value;
+						float perlinNoise = static_cast<float>(perlin.octave3D_01(x * scale.x, y * scale.y, z * scale.z, params.Octaves));
+						const unsigned char perlinValue = static_cast<unsigned char>(perlinNoise * 255.0f);
+
+						textureData[index + 0] = perlinValue;
+						textureData[index + 1] = perlinValue;
+						textureData[index + 2] = perlinValue;
+					}
+					else if (params.NoiseAlgorithm == CloudNoiseAlgorithm::CloudNoiseAlgorithm_WorleyPerlinMix)
+					{
+						float worleyNoise = worley.GetNoise(x * scale.x, y * scale.y, z * scale.z);
+						worleyNoise = (worleyNoise + 1.0f) * 0.5f;
+						worleyNoise = 1.0f - worleyNoise;
+						worleyNoise = std::pow(worleyNoise, 4.0f);
+
+						float perlinNoise = static_cast<float>(perlin.octave3D_01(x * scale.x, y * scale.y, z * scale.z, params.Octaves));
+						float erosionStrength = 2.2f;
+
+						float mixedNoise = worleyNoise - perlinNoise * (1 - worleyNoise) * erosionStrength;
+						const unsigned char mixedValue = static_cast<unsigned char>(std::clamp(mixedNoise, 0.0f, 1.0f) * 255.0f);
+
+						textureData[index + 0] = mixedValue;
+						textureData[index + 1] = mixedValue;
+						textureData[index + 2] = mixedValue;
 					}
 				}
 			}
